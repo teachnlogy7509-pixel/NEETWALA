@@ -6,7 +6,7 @@ API_KEYS = [
     os.getenv("GEMINI_API_KEY_2"),
 ]
 
-# 100% working stable model for new and existing accounts
+# नए SDK के लिए मॉडल का नाम बिना 'models/' के होना चाहिए
 MODEL = "gemini-1.5-flash"
 
 def ask_gemini(prompt: str) -> str:
