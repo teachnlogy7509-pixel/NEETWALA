@@ -4,9 +4,9 @@ import google.generativeai as genai
 API_KEYS = [
     os.getenv("GEMINI_API_KEY_1"),
     os.getenv("GEMINI_API_KEY_2"),
+    os.getenv("GEMINI_API_KEY"),
 ]
 
-# यहाँ ध्यान रखें: आगे 'models/' नहीं होना चाहिए
 MODEL_NAME = "gemini-1.5-flash"
 
 def ask_gemini(prompt: str) -> str:
