@@ -3,40 +3,43 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
+# अपनी files import करो
+from quiz import quiz
+from chapter import chapter_quiz
+from pdf import upload_pdf
+
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
+# /startar
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "NEET AI हिंदी बोट सक्रिय है।\n\nक्विज शुरू करने के लिए /quizar लिखें।"
+    message = (
+        "NEET AI हिंदी बोट सक्रिय है।\n\n"
+        "उपलब्ध Commands:\n"
+        "/startar - बोट शुरू करें\n"
+        "/quizar कोशिका 90 - टॉपिक क्विज\n"
+        "/chapterar आनुवंशिकी 180 - अध्याय क्विज\n"
+        "/uploadpdfar - PDF अपलोड करें\n"
     )
+    await update.message.reply_text(message)
 
-async def quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        await update.message.reply_text(
-            "उदाहरण: /quizar कोशिका 90"
+def main():
+    if not TOKEN:
+        raise ValueError(
+            "TELEGRAM_BOT_TOKEN environment variable सेट नहीं है।"
         )
-        return
 
-    topic = context.args[0]
-    count = 30
+    app = Application.builder().token(TOKEN).build()
 
-    if len(context.args) > 1:
-        try:
-            count = max(10, min(180, int(context.args[1])))
-        except:
-            count = 30
+    # सभी commands में ar suffix
+    app.add_handler(CommandHandler("startar", start))
+    app.add_handler(CommandHandler("quizar", quiz))
+    app.add_handler(CommandHandler("chapterar", chapter_quiz))
+    app.add_handler(CommandHandler("uploadpdfar", upload_pdf))
 
-    await update.message.reply_text(
-        f"विषय: {topic}\nप्रश्न: {count}\n\nNEET-स्तर के प्रश्न तैयार किए जा रहे हैं..."
-    )
-
-app = Application.builder().token(TOKEN).build()
-
-app.add_handler(CommandHandler("startar", start))
-app.add_handler(CommandHandler("quizar", quiz))
-
-if __name__ == "__main__":
     print("Bot started...")
     app.run_polling()
+
+if __name__ == "__main__":
+    main()
