@@ -6,8 +6,7 @@ API_KEYS = [
     os.getenv("GEMINI_API_KEY_2"),
 ]
 
-# Stable model
-MODEL = "gemini-2.5-flash-lite"
+MODEL = "gemini-2.0-flash"
 
 def ask_gemini(prompt: str) -> str:
     last_error = None
@@ -18,7 +17,6 @@ def ask_gemini(prompt: str) -> str:
 
         try:
             client = genai.Client(api_key=key)
-
             response = client.models.generate_content(
                 model=MODEL,
                 contents=prompt,
@@ -31,4 +29,4 @@ def ask_gemini(prompt: str) -> str:
             last_error = e
             continue
 
-    return f"प्रश्न तैयार नहीं हो सके। त्रुटि: {last_error}"
+    return f"Gemini API Error: {last_error}"
