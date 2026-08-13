@@ -5,28 +5,26 @@ from gemini import ask_gemini
 async def quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text(
-            "उदाहरण: /quizar कोशिका 90\n\nआप 10 से 180 तक प्रश्न चुन सकते हैं।"
+            "उदाहरण: /quizar कोशिका 90"
         )
         return
 
     topic = context.args[0]
-    count = 30
 
-    if len(context.args) > 1:
-        try:
-            count = max(10, min(180, int(context.args[1])))
-        except:
-            count = 30
+    try:
+        count = max(10, min(180, int(context.args[1])))
+    except:
+        count = 90
 
     await update.message.reply_text(
-        f"विषय: {topic}\nप्रश्न: {count}\n\nNEET-स्तर के हिंदी प्रश्न तैयार किए जा रहे हैं..."
+        f"विषय: {topic}\nप्रश्न: {count}\n\nNEET-स्तर के प्रश्न तैयार किए जा रहे हैं..."
     )
 
     prompt = f"""
-    केवल हिंदी में {count} मूल NEET-स्तर के जीवविज्ञान MCQ बनाओ।
+    केवल हिंदी में {count} मूल NEET-स्तर के जीवविज्ञान MCQ तैयार करो।
     विषय: {topic}
 
-    नियम:
+    प्रत्येक प्रश्न में:
     - 4 विकल्प (A, B, C, D)
     - सही उत्तर
     - संक्षिप्त व्याख्या
