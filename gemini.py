@@ -6,7 +6,8 @@ API_KEYS = [
     os.getenv("GEMINI_API_KEY_2"),
 ]
 
-MODEL = "gemini-2.5-flash"
+# Stable model
+MODEL = "gemini-2.5-flash-lite"
 
 def ask_gemini(prompt: str) -> str:
     last_error = None
@@ -30,7 +31,4 @@ def ask_gemini(prompt: str) -> str:
             last_error = e
             continue
 
-    return (
-        "इस समय प्रश्न तैयार नहीं हो सके। कृपया कुछ देर बाद पुनः प्रयास करें।\\n\\n"
-        f"त्रुटि: {last_error}"
-    )
+    return f"प्रश्न तैयार नहीं हो सके। त्रुटि: {last_error}"
