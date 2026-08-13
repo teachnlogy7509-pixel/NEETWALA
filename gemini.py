@@ -1,13 +1,12 @@
 import os
-from google import genai
+import google.generativeai as genai
 
 API_KEYS = [
     os.getenv("GEMINI_API_KEY_1"),
     os.getenv("GEMINI_API_KEY_2"),
 ]
 
-# यह सबसे स्टेबल और वर्तमान में पूरी तरह चालू मॉडल है
-MODEL = "gemini-1.5-flash"
+MODEL_NAME = "gemini-1.5-flash"
 
 def ask_gemini(prompt: str) -> str:
     last_error = None
@@ -17,11 +16,9 @@ def ask_gemini(prompt: str) -> str:
             continue
 
         try:
-            client = genai.Client(api_key=key)
-            response = client.models.generate_content(
-                model=MODEL,
-                contents=prompt,
-            )
+            genai.configure(api_key=key)
+            model = genai.GenerativeModel(MODEL_NAME)
+            response = model.generate_content(prompt)
 
             if response and response.text:
                 return response.text
