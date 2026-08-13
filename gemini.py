@@ -6,6 +6,7 @@ API_KEYS = [
     os.getenv("GEMINI_API_KEY_2"),
 ]
 
+# यहाँ ध्यान रखें: आगे 'models/' नहीं होना चाहिए
 MODEL_NAME = "gemini-1.5-flash"
 
 def ask_gemini(prompt: str) -> str:
