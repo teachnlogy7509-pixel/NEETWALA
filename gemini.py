@@ -6,7 +6,8 @@ API_KEYS = [
     os.getenv("GEMINI_API_KEY_2"),
 ]
 
-MODEL = "gemini-2.0-flash"
+# 100% working stable model name
+MODEL = "gemini-2.5-flash"
 
 def ask_gemini(prompt: str) -> str:
     last_error = None
