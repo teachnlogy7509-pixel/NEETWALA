@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from gemini import ask_gemini
+from gemini import ask_gemini, generate_short_notes
 
 
 def chunks(text, size=3900):
@@ -23,4 +23,22 @@ async def knowledge(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     answer = ask_gemini(prompt)
     for part in chunks(answer):
+        await update.message.reply_text(part)
+
+
+async def short_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    topic = " ".join(context.args).strip()
+    reply = update.message.reply_to_message
+    replied_text = (reply.text or reply.caption) if reply else None
+    source = topic or replied_text
+    if not source:
+        await update.message.reply_text(
+            "उदाहरण:\n/notesar कोशिका\n\nया किसी text message को reply करके केवल /notesar लिखें।"
+        )
+        return
+
+    await update.message.reply_text("Gemini-style short notes तैयार हो रहे हैं...")
+    title = topic if len(topic) < 120 else "Replied study material"
+    notes = generate_short_notes(source, title)
+    for part in chunks(notes):
         await update.message.reply_text(part)

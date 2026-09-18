@@ -34,17 +34,35 @@ def translate_text(text: str, target_language: str) -> str:
     """)
 
 
-def generate_pdf_knowledge(text: str, chapter: str) -> str:
+def generate_short_notes(source: str, title: str = "") -> str:
     return ask_gemini(f"""
-    तुम NEET Biology knowledge bot हो। नीचे PDF से निकला text है।
-    Chapter: {chapter}
-    केवल Hindi में concise study notes बनाओ:
-    1. मुख्य concept
-    2. NCERT key points
-    3. Important terms
-    4. 5 छोटे revision questions और उनके answers
-    Text से बाहर की जानकारी मत गढ़ो।
+    तुम NEET Biology के expert short-notes teacher हो।
+    Topic/title: {title or 'NEET Biology'}
 
-    PDF TEXT:
-    {text}
+    नीचे दिए गए topic या source material से exam-ready, concise Hindi short notes बनाओ।
+    अगर source केवल topic का नाम है, तो NCERT-aligned knowledge से notes बनाओ।
+    अगर source material दिया गया है, तो उसी की जानकारी को प्राथमिकता दो और facts मत गढ़ो।
+
+    Format exactly इसी तरह रखो:
+    1. एक clear title
+    2. Concept in 2-3 lines
+    3. Important definitions
+    4. Key points in bullets
+    5. Comparisons/table केवल जहां जरूरी हो
+    6. Formula, process या steps जहां लागू हों
+    7. NEET exam में याद रखने वाले points
+    8. एक mnemonic/trick अगर उपयोगी हो
+
+    Rules:
+    - केवल सरल Hindi, जरूरी scientific terms English brackets में
+    - बहुत छोटा लेकिन complete; लगभग 500-700 words से अधिक नहीं
+    - अनावश्यक introduction, greetings या questions मत लिखो
+    - MCQ मत बनाओ; यह केवल short notes हैं
+
+    SOURCE:
+    {source[:16000]}
     """)
+
+
+def generate_pdf_knowledge(text: str, chapter: str) -> str:
+    return generate_short_notes(text, chapter)

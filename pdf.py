@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from database import save_document
-from gemini import generate_pdf_knowledge
+from gemini import generate_short_notes
 from pdf_processor import detect_chapter, extract_text
 
 
@@ -29,13 +29,13 @@ async def upload_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chapter = detect_chapter(text)
         save_document(update.effective_chat.id, document.file_name, chapter, text)
         await update.message.reply_text(
-            f"PDF save हो गई।\nChapter: {chapter}\nExtracted characters: {len(text)}\n\nअब Hindi knowledge notes बन रहे हैं..."
+            f"PDF save हो गई।\nChapter: {chapter}\nExtracted characters: {len(text)}\n\nअब Gemini-style short notes बन रहे हैं..."
         )
-        notes = generate_pdf_knowledge(text[:12000], chapter)
+        notes = generate_short_notes(text[:12000], chapter)
         for part in chunks(notes):
             await update.message.reply_text(part)
         if len(text) > 12000:
-            await update.message.reply_text("PDF बड़ी है, इसलिए पहले 12,000 characters पर notes बनाए गए हैं। पूरे PDF का translation: /translatepdfar English")
+            await update.message.reply_text("PDF बड़ी है, इसलिए पहले 12,000 characters पर short notes बनाए गए हैं। पूरे PDF का translation: /translatepdfar English")
     except Exception as error:
         await update.message.reply_text(f"PDF process नहीं हो पाई: {error}")
     finally:
@@ -43,4 +43,4 @@ async def upload_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def upload_pdf_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("PDF को Telegram में Document के रूप में भेजें। Bot text निकालेगा, chapter पहचानेगा और Hindi knowledge notes बनाएगा।")
+    await update.message.reply_text("PDF को Telegram में Document के रूप में भेजें। Bot text निकालेगा, chapter पहचानेगा और Gemini-style Hindi short notes बनाएगा।")
