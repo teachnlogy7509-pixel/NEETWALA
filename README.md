@@ -1,38 +1,44 @@
 # NEETWALA Knowledge Bot
 
-यह Telegram bot Hindi NEET Biology के लिए Gemini-style knowledge और short-notes assistant है।
+यह Telegram bot Hindi NEET Biology के लिए AI knowledge, short-notes और educational diagram assistant है।
 
 ## मुख्य सुविधाएँ
 
 - `/knowar` से Hindi में concept explanation
-- `/notesar` से किसी topic के exam-ready short notes
-- किसी text message को reply करके `/notesar` लिखने पर उसी text के short notes
-- Gemini से topic और chapter-based NEET MCQ
-- PDF को Telegram Document के रूप में भेजने पर text extraction
-- PDF chapter detection और Gemini-style Hindi short notes
+- `/notesar` से exam-ready short notes
+- `/diagramaar` से topic का generated educational SVG diagram
+- OpenRouter → Groq → Gemini AI fallback chain
+- PDF को Telegram Document के रूप में भेजने पर text extraction और short notes
 - Latest PDF का translation: `/translatepdfar English`
 - किसी replied message का translation: `/translatear English`
-- हर user का `chat_id`, username, name, language और last-seen SQLite में save
+- हर user का chat ID, username, name, language और last-seen SQLite में save
 - Admin broadcast: `/broadcast संदेश` या किसी message को reply करके `/broadcast`
 - Admin user list: `/usersar`
 - Admin CSV export: `/exportusersar`
 - Leaderboard हटाकर knowledge और user-management पर focus
 
-## Short notes कैसे बनेंगे?
+## AI keys
 
-Topic के लिए:
+Railway Variables में इनमें से कम से कम एक provider की key लगाएँ:
+
+```text
+OPENROUTER_API_KEY=...
+OPENROUTER_MODEL=openrouter/auto
+GROQ_API_KEY=...
+GROQ_MODEL=llama-3.3-70b-versatile
+GEMINI_API_KEY_1=...
+```
+
+Bot पहले OpenRouter, फिर Groq, फिर Gemini try करता है। Keys code या GitHub में commit न करें।
+
+## Short notes और diagram
 
 ```text
 /notesar कोशिका
+/diagramaar परागण और निषेचन
 ```
 
-किसी Telegram text को summarize करने के लिए उस message पर reply करें:
-
-```text
-/notesar
-```
-
-Bot title, concept, definitions, key points, जरूरी comparison, process/formula, NEET exam points और mnemonic/trick के साथ लगभग 500-700 words के concise notes देगा।
+किसी Telegram text message को reply करके `/notesar` लिखने पर उसी text के short notes बनेंगे। `/diagramaar` एक educational SVG file बनाता है जिसे browser में खोला जा सकता है।
 
 ## Setup
 
@@ -45,25 +51,18 @@ cp .env.example .env
 python main.py
 ```
 
-`.env` में ये values भरें:
+Required values:
 
 ```text
 TELEGRAM_BOT_TOKEN=...
-GEMINI_API_KEY_1=...
 ADMIN_CHAT_IDS=123456789
 ```
 
-Admin chat ID जानने के लिए bot में `/id` भेजें। `ADMIN_CHAT_IDS` में comma-separated IDs लिख सकते हैं।
+Admin chat ID जानने के लिए bot में `/id` भेजें।
 
 ## PDF
 
-PDF को Telegram में **Document** के रूप में भेजें। Bot extracted text save करेगा, chapter पहचानेगा और short notes बनाएगा। फिर latest PDF के लिए:
-
-```text
-/translatepdfar English
-```
-
-Scanned/image-only PDFs में selectable text नहीं होने पर OCR अलग से जोड़ना होगा।
+PDF को Telegram में **Document** के रूप में भेजें। Bot extracted text save करेगा, chapter पहचानेगा और Hindi short notes बनाएगा। Scanned/image-only PDFs में OCR अलग से जोड़ना होगा।
 
 ## Privacy
 

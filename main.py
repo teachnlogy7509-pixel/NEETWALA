@@ -6,6 +6,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 from broadcast import broadcast, export_users, users_command
 from database import init_db, save_user
 from chapter import chapter_quiz
+from diagram import diagram
 from knowledge import knowledge, short_notes
 from pdf import upload_pdf, upload_pdf_help
 from quiz import quiz
@@ -26,6 +27,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "NEET Knowledge Bot सक्रिय है।\n\n"
         "/knowar प्रकाश संश्लेषण समझाओ\n"
         "/notesar कोशिका\n"
+        "/diagramaar परागण और निषेचन\n"
         "/quizar कोशिका 30\n"
         "/chapterar आनुवंशिकी 30\n"
         "/uploadpdfar\n"
@@ -40,6 +42,7 @@ async def helpar(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Commands:\n\n"
         "/knowar <प्रश्न> — Hindi knowledge answer\n"
         "/notesar <topic> — Gemini-style short notes\n"
+        "/diagramaar <topic> — educational SVG diagram\n"
         "/chapterar <chapter> <गिनती> — chapter quiz\n"
         "/quizar <विषय> <गिनती> — MCQ quiz\n"
         "/uploadpdfar — PDF भेजने की जानकारी\n"
@@ -70,6 +73,7 @@ def main():
     app.add_handler(CommandHandler("id", show_id))
     app.add_handler(CommandHandler("knowar", knowledge))
     app.add_handler(CommandHandler("notesar", short_notes))
+    app.add_handler(CommandHandler("diagramaar", diagram))
     app.add_handler(CommandHandler("quizar", quiz))
     app.add_handler(CommandHandler("chapterar", chapter_quiz))
     app.add_handler(CommandHandler("uploadpdfar", upload_pdf_help))
